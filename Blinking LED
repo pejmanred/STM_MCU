@@ -1,0 +1,34 @@
+#include "stm32f4xx_hal.h"
+void configureLEDpins(void);
+
+int main()
+{
+	//1: Configure LEDs pins
+	configureLEDpins();
+	//2: Define Delay function
+	
+	
+	while(1)
+	{
+		GPIOD->ODR ^= (0xFUL << 12);
+		//HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15);
+		HAL_Delay(1000);
+	}
+}
+
+
+void configureLEDpins(void)
+{
+	RCC->AHB1ENR |= (1 << 3);										//Enable the Clock
+	// Set mode as output for GPIO Pins 12 - 15
+	GPIOD->MODER &= ~( 0xFF << 12*2);   				//Set Bits to Zero
+	GPIOD->MODER &=  ~(0x55 << 12*2);						//0x55 = 01010101(b)
+
+//   USING API's
+//	__HAL_RCC_GPIOD_CLK_ENABLE();
+//	GPIO_InitTypeDef myLEDconfig;
+//	myLEDconfig.Mode= GPIO_MODE_OUTPUT_PP;
+//	myLEDconfig.Pin = GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
+//	HAL_GPIO_Init(GPIOD, &myLEDconfig);
+	
+}
